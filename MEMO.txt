@@ -8,6 +8,7 @@
  /* ネットから */ +マークがある場合著作権関係気にする
   ・やさしさゴシック(http://www.fontna.com) => Text Mesh Proの関係でファイル名はローマ字
   ・+ モンスター素材屋さん(https://sozai.creature-ya.com) => クレジットURL明記
+  ・シングルトンを使ってみよう(https://qiita.com/Teach/items/c146c7939db7acbd7eee)
 
  /* unity付属 */
   ・Text Mesh Pro

@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 6132158913293779709}
   - component: {fileID: 2161644880212021459}
+  - component: {fileID: 5282105821955169451}
+  - component: {fileID: 149612889500678609}
   m_Layer: 5
   m_Name: Card
   m_TagString: Untagged
@@ -50,6 +52,31 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 759514426088640162}
   m_CullTransparentMesh: 0
+--- !u!114 &5282105821955169451
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 759514426088640162}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55c48f85105c46f42a78171890547899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardParent: {fileID: 0}
+--- !u!225 &149612889500678609
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 759514426088640162}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &2121550071138812567
 GameObject:
   m_ObjectHideFlags: 0
