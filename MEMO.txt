@@ -1,5 +1,7 @@
 <参考サイト>
   ・【解説通りに作るだけ】Unityのデジタルカードゲーム作り方(https://yuus01.info/game-make/unity_tcg_make1)
+  ・【超簡単】ワンタッチでエクセルからCSV出力するVBAプログラム(https://www.excelspeedup.com/csvsyuturyoku/#i-8)
+  ・【Unity】CSVからScriptableObjectにデータを流し込むEditor拡張サンプル(https://ekulabo.com/csv-to-scriptable-object)
 
 <使用アセット>
  /* AssetStoreから */
@@ -16,6 +18,7 @@
 <メモ>
 
 <アイデア>
-apkやマスターデータ(Excel)は別リポジトリ?
+apkは別リポジトリ?
+マスターデータ(Excel)は別リポジトリ
 
 <ToDoリスト>

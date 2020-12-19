@@ -18,7 +18,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
     void StartGame()
     {
-        CreateCard(1, playerHand);
+        CreateCard(0, playerHand);
     }
 
     void CreateCard(int cardID,Transform place)
