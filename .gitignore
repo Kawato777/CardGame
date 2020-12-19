@@ -60,4 +60,4 @@ sysinfo.txt
 crashlytics-build.properties
 
 [Aa]ssets/.gitignore
-Assets/Resources/CardEntityList/
+Assets/Resources/**/*.asset
