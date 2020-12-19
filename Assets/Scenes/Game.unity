@@ -1032,7 +1032,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1227194444}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1894767773}
+        m_MethodName: ChangeTurn
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1227194444
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1833,6 +1844,8 @@ MonoBehaviour:
   cardPrefab: {fileID: 759514426088640162, guid: 09aecfdfb7131404993b416171f68f6e,
     type: 3}
   playerHand: {fileID: 1202989826}
+  playerField: {fileID: 2111397487}
+  enemyField: {fileID: 1388161246}
 --- !u!1 &1960740208
 GameObject:
   m_ObjectHideFlags: 0
