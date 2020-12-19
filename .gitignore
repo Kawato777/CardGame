@@ -60,6 +60,7 @@ crashlytics-build.properties
 
 [Aa]ssets/.gitignore
 Assets/Resources/**/*.asset
+Assets/Images/CardIconEntityList/*.asset
 Assets/**/*.xlsx
 Assets/**/*.xlsm
 Assets/**/*.csv
