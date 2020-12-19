@@ -42,7 +42,6 @@ ExportedObj/
 *.mdb
 *.opendb
 *.VC.db
-*.xlsx
 
 # Unity3D generated meta files
 *.pidb.meta
@@ -61,3 +60,6 @@ crashlytics-build.properties
 
 [Aa]ssets/.gitignore
 Assets/Resources/**/*.asset
+Assets/**/*.xlsx
+Assets/**/*.xlsm
+Assets/**/*.csv
