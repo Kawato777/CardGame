@@ -13,7 +13,9 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     PlayerHandController playerHandController;
 
     bool isPlayerTurn = true;   // ターン変数
-    List<int> deck = new List<int>() { 1, 2, 0, 1, 1, 2, 2, 0, 0, 1, 2, 0, 1, 2, 0 };   // デッキ
+    List<int> playerDeck = new List<int>() { 1, 2, 0, 1, 1, 2, 2, 0, 0, 1, 2, 0, 1, 2, 0 };   // プレイヤーデッキ
+    List<int> enemyDeck = new List<int>() { 2, 2, 1, 1, 0, 0, 1, 1, 2, 2, 1, 1, 0, 0, 2 };
+
 
     // Start is called before the first frame update
     void Start()
@@ -41,7 +43,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
     void DrowCard(Transform hand)   // カードを引く
     {
-        if(deck.Count == 0)
+        if(playerDeck.Count == 0)
         {
             return;
         }
@@ -49,8 +51,8 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         if(playerHandController.ReturnPlayerHandCards() < 9)
         {
             // デッキの一番上のカードを抜き取り、手札に加える
-            int cardID = deck[0];
-            deck.RemoveAt(0);
+            int cardID = playerDeck[0];
+            playerDeck.RemoveAt(0);
             CreateCard(cardID, hand);
         }
     }
@@ -96,7 +98,9 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         
         if(enemyFieldCardList.Length < 5)
         {
-            CreateCard(0, enemyField);  // カードを召喚
+            int cardID = enemyDeck[0];
+            enemyDeck.RemoveAt(0);
+            CreateCard(cardID, enemyField);  // カードを召喚
         }
 
         ChangeTurn();   // ターンエンドする
