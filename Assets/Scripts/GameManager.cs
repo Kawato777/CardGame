@@ -41,10 +41,14 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
             return;
         }
 
-        // デッキの一番上のカードを抜き取り、手札に加える
-        int cardID = deck[0];
-        deck.RemoveAt(0);
-        CreateCard(cardID, hand);
+        CardController[] playerHandCardList = playerHand.GetComponentsInChildren<CardController>();
+        if(playerHandCardList.Length < 9)
+        {
+            // デッキの一番上のカードを抜き取り、手札に加える
+            int cardID = deck[0];
+            deck.RemoveAt(0);
+            CreateCard(cardID, hand);
+        }
     }
 
     void SetStartHand() // 手札を3枚加える
@@ -84,7 +88,12 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     {
         Debug.Log("Enemyのターン");
 
-        CreateCard(0, enemyField);  // カードを召喚
+        CardController[] enemyFieldCardList = enemyField.GetComponentsInChildren<CardController>();
+        
+        if(enemyFieldCardList.Length < 5)
+        {
+            CreateCard(0, enemyField);  // カードを召喚
+        }
 
         ChangeTurn();   // ターンエンドする
     }
