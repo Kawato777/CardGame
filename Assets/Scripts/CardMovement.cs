@@ -1,17 +1,27 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
     public Transform cardParent;
+    PlayerHandController playerHandController;
+    int childNum;
+
+    void Start()
+    {
+        playerHandController = GameObject.Find("PlayerHand").GetComponent<PlayerHandController>();
+    }
 
     public void OnBeginDrag(PointerEventData eventData) // ドラッグを始めるときに行う処理
     {
         cardParent = transform.parent;
+        childNum = transform.GetSiblingIndex();
         transform.SetParent(cardParent.parent, false);
         GetComponent<CanvasGroup>().blocksRaycasts = false; // blocksRaycastsをオフにする
+        playerHandController.HandView(true);
     }
 
     public void OnDrag(PointerEventData eventData) // ドラッグした時に起こす処理
@@ -23,6 +33,6 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     {
         transform.SetParent(cardParent, false);
         GetComponent<CanvasGroup>().blocksRaycasts = true; // blocksRaycastsをオンにする
+        transform.SetSiblingIndex(childNum);
     }
-
 }

@@ -10,6 +10,8 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     [SerializeField]
     Transform playerHand, playerField, enemyField;
 
+    PlayerHandController playerHandController;
+
     bool isPlayerTurn = true;   // ターン変数
     List<int> deck = new List<int>() { 1, 2, 0, 1, 1, 2, 2, 0, 0, 1, 2, 0, 1, 2, 0 };   // デッキ
 
@@ -21,6 +23,9 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
     void StartGame()    // 初期値の設定
     {
+        // プレイヤー手札コントローラーをセット
+        playerHandController = playerHand.GetComponent<PlayerHandController>();
+
         // 初期手札を配る
         SetStartHand();
 
@@ -41,8 +46,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
             return;
         }
 
-        CardController[] playerHandCardList = playerHand.GetComponentsInChildren<CardController>();
-        if(playerHandCardList.Length < 9)
+        if(playerHandController.ReturnPlayerHandCards() < 9)
         {
             // デッキの一番上のカードを抜き取り、手札に加える
             int cardID = deck[0];
