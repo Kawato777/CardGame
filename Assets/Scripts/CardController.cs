@@ -17,4 +17,14 @@ public class CardController : MonoBehaviour
         model = new CardModel(cardID);
         view.Show(model);
     }
+
+    public void DestroyCard(CardController card)
+    {
+        Destroy(card.gameObject);
+    }
+
+    public void Show()
+    {
+        view.Show(model);
+    }
 }

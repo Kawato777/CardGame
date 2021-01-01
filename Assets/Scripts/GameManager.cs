@@ -105,4 +105,23 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
         ChangeTurn();   // ターンエンドする
     }
+
+    public void CardBattle(CardController attackCard,CardController defenceCard)
+    {
+        attackCard.model.hp -= defenceCard.model.power;
+        defenceCard.model.hp -= attackCard.model.power;
+
+        attackCard.Show();
+        defenceCard.Show();
+
+        if (attackCard.model.hp < 0)
+        {
+            attackCard.DestroyCard(attackCard);
+        }
+
+        if(defenceCard.model.hp < 0)
+        {
+            defenceCard.DestroyCard(defenceCard);
+        }
+    }
 }
