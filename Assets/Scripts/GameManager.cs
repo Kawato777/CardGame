@@ -104,6 +104,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
         CardController[] playerFieldCardList = playerField.GetComponentsInChildren<CardController>();
         SetAttackableFieldCard(playerFieldCardList, true);
+        ManaCostPanel.Instance.PlusDefaultManaCost();
 
         DrowCard(playerHand);   // 手札を一枚加える
     }
