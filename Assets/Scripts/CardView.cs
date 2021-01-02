@@ -8,6 +8,7 @@ public class CardView : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI nameText, powerText, costText, hpText;
     [SerializeField] Image iconImage;
+    [SerializeField] GameObject canAttackPanel;
 
     public void Show(CardModel model)
     {
@@ -16,6 +17,10 @@ public class CardView : MonoBehaviour
         costText.text = model.cost.ToString();
         hpText.text = model.hp.ToString();
         iconImage.sprite = model.icon;
+    }
 
+    public void SetCanAttackPanel(bool flag)
+    {
+        canAttackPanel.SetActive(flag);
     }
 }

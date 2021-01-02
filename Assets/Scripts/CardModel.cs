@@ -10,8 +10,11 @@ public class CardModel : MonoBehaviour
     public int power;
     public int hp;
     public Sprite icon;
-    
-    public CardModel(int cardID)
+
+    public bool canAttack = false;
+    public bool playerCard = false;
+
+    public CardModel(int cardID, bool isPlayerCard)
     {
         CardEntity cardEntity = Resources.Load<CardEntity>("CardEntityList/ID_" + cardID);
 
@@ -23,5 +26,7 @@ public class CardModel : MonoBehaviour
         power = cardEntity.power;
         hp = cardEntity.hp;
         icon = cardEntity.icon;
+
+        playerCard = isPlayerCard;
     }
 }

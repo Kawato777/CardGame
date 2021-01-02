@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
     public Transform cardParent;
+    Transform wasParent;
     PlayerHandController playerHandController;
     int childNum;
 
@@ -17,7 +18,7 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
 
     public void OnBeginDrag(PointerEventData eventData) // ドラッグを始めるときに行う処理
     {
-        cardParent = transform.parent;
+        cardParent = wasParent =transform.parent;
         childNum = transform.GetSiblingIndex();
         transform.SetParent(cardParent.parent, false);
         GetComponent<CanvasGroup>().blocksRaycasts = false; // blocksRaycastsをオフにする
@@ -33,6 +34,13 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     {
         transform.SetParent(cardParent, false);
         GetComponent<CanvasGroup>().blocksRaycasts = true; // blocksRaycastsをオンにする
-        transform.SetSiblingIndex(childNum);
+        if(wasParent != cardParent)
+        {
+            transform.SetAsLastSibling();
+        }
+        else
+        {
+            transform.SetSiblingIndex(childNum);
+        }
     }
 }

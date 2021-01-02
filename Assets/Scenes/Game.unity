@@ -792,6 +792,7 @@ GameObject:
   - component: {fileID: 1063745792}
   - component: {fileID: 1063745794}
   - component: {fileID: 1063745793}
+  - component: {fileID: 1063745795}
   m_Layer: 5
   m_Name: EnemyLeader
   m_TagString: Untagged
@@ -856,6 +857,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1063745791}
   m_CullTransparentMesh: 0
+--- !u!114 &1063745795
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1063745791}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30404629600da5f40873077c25cb826d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1157358568
 GameObject:
   m_ObjectHideFlags: 0
@@ -2119,6 +2132,8 @@ MonoBehaviour:
   playerHand: {fileID: 1202989826}
   playerField: {fileID: 2111397487}
   enemyField: {fileID: 1388161246}
+  playerLeaderHPText: {fileID: 1747604045}
+  enemyLeaderHpText: {fileID: 293967709}
 --- !u!1 &1960740208
 GameObject:
   m_ObjectHideFlags: 0

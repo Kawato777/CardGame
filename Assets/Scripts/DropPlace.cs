@@ -9,7 +9,7 @@ public class DropPlace : MonoBehaviour, IDropHandler
     public void OnDrop(PointerEventData eventData) // ドロップされた時に行う処理
     {
         CardMovement card = eventData.pointerDrag.GetComponent<CardMovement>(); // ドラッグしてきた情報からCardMovementを取得
-        if (card != null) // もしカードがあれば、
+        if (card != null && GetComponentsInChildren<CardController>().Length < 5) // もしカードがあれば、
         {
             card.cardParent = this.transform; // カードの親要素を自分（アタッチされてるオブジェクト）にする
         }

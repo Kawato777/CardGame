@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class GameManager : SingletonMonoBehaviour<GameManager>
@@ -9,6 +10,8 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     GameObject cardPrefab;
     [SerializeField]
     Transform playerHand, playerField, enemyField;
+    [SerializeField]
+    TextMeshProUGUI playerLeaderHPText, enemyLeaderHpText;
 
     PlayerHandController playerHandController;
 
@@ -16,6 +19,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     List<int> playerDeck = new List<int>() { 1, 2, 0, 1, 1, 2, 2, 0, 0, 1, 2, 0, 1, 2, 0 };   // プレイヤーデッキ
     List<int> enemyDeck = new List<int>() { 2, 2, 1, 1, 0, 0, 1, 1, 2, 2, 1, 1, 0, 0, 2 };
 
+    int enemyLeaderHP,playerLeaderHP;
 
     // Start is called before the first frame update
     void Start()
@@ -25,6 +29,9 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
     void StartGame()    // 初期値の設定
     {
+        enemyLeaderHP = playerLeaderHP = 15;
+        ShowLeaderHP();
+
         // プレイヤー手札コントローラーをセット
         playerHandController = playerHand.GetComponent<PlayerHandController>();
 
@@ -38,7 +45,15 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     void CreateCard(int cardID,Transform place)
     {
         CardController card = Instantiate(cardPrefab, place).GetComponent<CardController>();
-        card.Init(cardID);
+        if(place == playerField || place == playerHand)
+        {
+            card.Init(cardID, true);
+        }
+        else
+        {
+            card.Init(cardID, false);
+        }
+        
     }
 
     void DrowCard(Transform hand)   // カードを引く
@@ -87,6 +102,9 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     {
         Debug.Log("Playerのターン");
 
+        CardController[] playerFieldCardList = playerField.GetComponentsInChildren<CardController>();
+        SetAttackableFieldCard(playerFieldCardList, true);
+
         DrowCard(playerHand);   // 手札を一枚加える
     }
 
@@ -108,6 +126,16 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
     public void CardBattle(CardController attackCard,CardController defenceCard)
     {
+        if(attackCard.model.canAttack == false)
+        {
+            return;
+        }
+
+        if(attackCard.model.playerCard == defenceCard.model.playerCard)
+        {
+            return;
+        }
+
         attackCard.model.hp -= defenceCard.model.power;
         defenceCard.model.hp -= attackCard.model.power;
 
@@ -123,5 +151,48 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         {
             defenceCard.DestroyCard(defenceCard);
         }
+
+        attackCard.model.canAttack = false;
+        attackCard.view.SetCanAttackPanel(false);
+    }
+
+    void SetAttackableFieldCard(CardController[] cardList, bool canAttack)
+    {
+        foreach(CardController card in cardList)
+        {
+            card.model.canAttack = canAttack;
+            card.view.SetCanAttackPanel(canAttack);
+        }
+    }
+
+    public void AttackToLeader(CardController attackcard,bool isPlayerCard)
+    {
+        if(attackcard.model.canAttack == false)
+        {
+            return;
+        }
+
+        enemyLeaderHP -= attackcard.model.power;
+
+        attackcard.model.canAttack = false;
+        attackcard.view.SetCanAttackPanel(false);
+        Debug.Log($"敵のHP:{enemyLeaderHP}");
+        ShowLeaderHP();
+    }
+
+    public void ShowLeaderHP()
+    {
+        if(playerLeaderHP <= 0)
+        {
+            playerLeaderHP = 0;
+        }
+
+        if(enemyLeaderHP <= 0)
+        {
+            enemyLeaderHP = 0;
+        }
+
+        playerLeaderHPText.text = playerLeaderHP.ToString();
+        enemyLeaderHpText.text = enemyLeaderHP.ToString();
     }
 }
