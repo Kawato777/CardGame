@@ -10,10 +10,10 @@ public class DropPlace : MonoBehaviour, IDropHandler
     {
         CardMovement card = eventData.pointerDrag.GetComponent<CardMovement>(); // ドラッグしてきた情報からCardMovementを取得
         CardController cardController = card.gameObject.GetComponent<CardController>();
-        if (card != null && GetComponentsInChildren<CardController>().Length < 5 && ManaCostPanel.Instance.CheckUsingCost(cardController.model.cost))   // もしカードがあれば、
+        if (card != null && GetComponentsInChildren<CardController>().Length < 5 && ManaCostManager.Instance.CheckUsingCost(cardController.model.cost, true))    // もしカードがあれば、
         {
             card.cardParent = this.transform; // カードの親要素を自分（アタッチされてるオブジェクト）にする
-            ManaCostPanel.Instance.UseManaCost(card.gameObject.GetComponent<CardController>().model.cost);
+            ManaCostManager.Instance.UseManaCostText(card.gameObject.GetComponent<CardController>().model.cost, true);
         }
     }
 }

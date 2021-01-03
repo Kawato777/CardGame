@@ -25,4 +25,6 @@ Excelファイルを開いてるときにはコミットできない
 apkは別リポジトリ?
 マスターデータ(Excel)は別リポジトリ
 
+カード効果はAddComponent?GameManagerで管理?
+
 <ToDoリスト>

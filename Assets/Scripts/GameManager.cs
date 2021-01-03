@@ -38,6 +38,10 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         // 初期手札を配る
         SetStartHand();
 
+        // コストテキスト設定
+        ManaCostManager.Instance.SetManaCostText(0, 0, true);
+        ManaCostManager.Instance.SetManaCostText(0, 0, false);
+
         // ターンの決定
         TurnCalc();
     }
@@ -104,7 +108,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
         CardController[] playerFieldCardList = playerField.GetComponentsInChildren<CardController>();
         SetAttackableFieldCard(playerFieldCardList, true);
-        ManaCostPanel.Instance.PlusDefaultManaCost();
+        ManaCostManager.Instance.SetManaCostText(true);
 
         DrowCard(playerHand);   // 手札を一枚加える
     }
@@ -112,6 +116,8 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     void EnemyTurn()
     {
         Debug.Log("Enemyのターン");
+
+        ManaCostManager.Instance.SetManaCostText(false);
 
         CardController[] enemyFieldCardList = enemyField.GetComponentsInChildren<CardController>();
         
