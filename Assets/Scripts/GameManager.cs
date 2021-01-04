@@ -9,11 +9,13 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     [SerializeField]
     GameObject cardPrefab;
     [SerializeField]
-    Transform playerHand, playerField, enemyField;
+    Transform playerHand, playerField, enemyHand, enemyField;
     [SerializeField]
     TextMeshProUGUI playerLeaderHPText, enemyLeaderHpText;
 
     PlayerHandController playerHandController;
+    EnemyHandController enemyHandController;
+
 
     bool isPlayerTurn = true;   // ターン変数
     List<int> playerDeck = new List<int>() { 1, 2, 0, 1, 1, 2, 2, 0, 0, 1, 2, 0, 1, 2, 0 };   // プレイヤーデッキ
@@ -34,6 +36,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
         // プレイヤー手札コントローラーをセット
         playerHandController = playerHand.GetComponent<PlayerHandController>();
+        enemyHandController = enemyHand.GetComponent<EnemyHandController>();
 
         // 初期手札を配る
         SetStartHand();
@@ -60,27 +63,46 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         
     }
 
-    void DrowCard(Transform hand)   // カードを引く
+    void DrowCard(bool isPlayer)   // カードを引く
     {
-        if(playerDeck.Count == 0)
+        if (isPlayer)
         {
-            return;
-        }
+            if(playerDeck.Count == 0)
+            {
+                return;
+            }
 
-        if(playerHandController.ReturnPlayerHandCards() < 9)
-        {
-            // デッキの一番上のカードを抜き取り、手札に加える
-            int cardID = playerDeck[0];
-            playerDeck.RemoveAt(0);
-            CreateCard(cardID, hand);
+            if(playerHandController.ReturnPlayerHandCards() < 9)
+            {
+                // デッキの一番上のカードを抜き取り、手札に加える
+                int cardID = playerDeck[0];
+                playerDeck.RemoveAt(0);
+                CreateCard(cardID, playerHand);
+            }
         }
+        else
+        {
+            if (enemyDeck.Count == 0)
+            {
+                return;
+            }
+
+            if (enemyHandController.ReturnEnemyHandCards() < 9)
+            {
+                // デッキの一番上のカードを抜き取り、手札に加える
+                int cardID = enemyDeck[0];
+                enemyDeck.RemoveAt(0);
+                CreateCard(cardID, enemyHand);
+            }
+        } 
     }
 
     void SetStartHand() // 手札を3枚加える
     {
         for(int i = 0; i < 3; i++)
         {
-            DrowCard(playerHand);
+            DrowCard(true);
+            DrowCard(false);
         }
     }
 
@@ -110,7 +132,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         SetAttackableFieldCard(playerFieldCardList, true);
         ManaCostManager.Instance.SetManaCostText(true);
 
-        DrowCard(playerHand);   // 手札を一枚加える
+        DrowCard(true);   // 手札を一枚加える
     }
 
     void EnemyTurn()
@@ -119,14 +141,22 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
         ManaCostManager.Instance.SetManaCostText(false);
 
+        DrowCard(false);
+
+        CardController[] enemyHandCardList = enemyHandController.ReturnCardController();
         CardController[] enemyFieldCardList = enemyField.GetComponentsInChildren<CardController>();
         
-        if(enemyFieldCardList.Length < 5)
+        foreach(var item in enemyHandCardList)
         {
-            int cardID = enemyDeck[0];
-            enemyDeck.RemoveAt(0);
-            CreateCard(cardID, enemyField);  // カードを召喚
+            if(enemyFieldCardList.Length < 5 && ManaCostManager.Instance.CheckUsingCost(item.model.cost, false))
+            {
+                item.transform.SetParent(enemyField);   // enemyFieldに召喚
+                item.transform.SetAsLastSibling();
+                ManaCostManager.Instance.UseManaCostText(item.model.cost, false);
+            } 
         }
+
+        // 選んで攻撃
 
         ChangeTurn();   // ターンエンドする
     }

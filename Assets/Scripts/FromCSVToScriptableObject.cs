@@ -64,6 +64,9 @@ public class FromCSVToScriptableObject
             column++;
             cardData.hp = int.Parse(parseByComma[column]);
 
+            column++;
+            cardData.text = parseByComma[column];
+
             CardIconEntity cardIconEntity = (CardIconEntity)AssetDatabase.LoadAssetAtPath($"Assets/Images/CardIconEntityList/CardIcon_{cardData.cardID}.asset", typeof(CardIconEntity));
             if(cardIconEntity == null)
             {

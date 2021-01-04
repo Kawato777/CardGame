@@ -39,14 +39,20 @@ public class ManaCostManager : SingletonMonoBehaviour<ManaCostManager>
     {
         if (isPlayer)
         {
-            playerDefaultManaCost++;
+            if(playerDefaultManaCost < 15)
+            {
+                playerDefaultManaCost++;
+            }
             playerManaCost = playerDefaultManaCost;
             
             playerManaCostText.text = $"{playerManaCost} / {playerDefaultManaCost}";
         }
         else
         {
-            enemyDefaultManaCost++;
+            if (enemyDefaultManaCost < 15)
+            {
+                enemyDefaultManaCost++;
+            }
             enemyManaCost = enemyDefaultManaCost;
 
             enemyManaCostText.text = $"{enemyManaCost} / {enemyDefaultManaCost}";
@@ -60,23 +66,23 @@ public class ManaCostManager : SingletonMonoBehaviour<ManaCostManager>
     {
         if (isPlayer)
         {
-            int usedCost = playerManaCost - useCost;
-            if (usedCost < 0)
+            playerManaCost -= useCost;
+            if (playerManaCost < 0)
             {
-                usedCost = 0;
+                playerManaCost = 0;
             }
 
-            playerManaCostText.text = $"{usedCost} / {playerDefaultManaCost}";
+            playerManaCostText.text = $"{playerManaCost} / {playerDefaultManaCost}";
         }
         else
         {
-            int usedCost = enemyManaCost - useCost;
-            if (usedCost < 0)
+            enemyManaCost -= useCost;
+            if (enemyManaCost < 0)
             {
-                usedCost = 0;
+                enemyManaCost = 0;
             }
 
-            enemyManaCostText.text = $"{usedCost} / {enemyDefaultManaCost}";
+            enemyManaCostText.text = $"{enemyManaCost} / {enemyDefaultManaCost}";
         }
     }
 

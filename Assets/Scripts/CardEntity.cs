@@ -12,4 +12,5 @@ public class CardEntity : ScriptableObject
     public int power;
     public int hp;
     public Sprite icon;
+    public string text;
 }

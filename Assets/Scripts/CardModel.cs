@@ -10,6 +10,7 @@ public class CardModel : MonoBehaviour
     public int power;
     public int hp;
     public Sprite icon;
+    public string text;
 
     public bool canAttack = false;
     public bool playerCard = false;
@@ -26,6 +27,7 @@ public class CardModel : MonoBehaviour
         power = cardEntity.power;
         hp = cardEntity.hp;
         icon = cardEntity.icon;
+        text = cardEntity.text;
 
         playerCard = isPlayerCard;
     }
