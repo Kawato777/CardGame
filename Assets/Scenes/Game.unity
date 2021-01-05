@@ -828,7 +828,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 55, y: -146.1748}
+  m_AnchoredPosition: {x: 55, y: -146.17188}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &791048652
@@ -1176,6 +1176,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8acc7b4e325069743966ae9e4d77e1e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  leftCardNum: 0
   rightButton: {fileID: 2036753361}
   leftButton: {fileID: 791048650}
 --- !u!1 &994342781
@@ -1679,7 +1680,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -933.82495}
+  m_AnchoredPosition: {x: 0, y: -933.8281}
   m_SizeDelta: {x: 0, y: -1867.6499}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1202989827
@@ -1921,7 +1922,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 160.98975}
+  m_AnchoredPosition: {x: 0, y: 160.99219}
   m_SizeDelta: {x: 0, y: -1867.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1388161247
@@ -2655,8 +2656,13 @@ MonoBehaviour:
   playerField: {fileID: 2111397487}
   enemyHand: {fileID: 840914550}
   enemyField: {fileID: 1388161246}
+  canvas: {fileID: 1183549008}
   playerLeaderHPText: {fileID: 1747604045}
   enemyLeaderHpText: {fileID: 293967709}
+  buttons:
+  - {fileID: 1227194443}
+  - {fileID: 2036753363}
+  - {fileID: 791048652}
 --- !u!1 &1960740208
 GameObject:
   m_ObjectHideFlags: 0
@@ -2758,7 +2764,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1030, y: -146.1748}
+  m_AnchoredPosition: {x: 1030, y: -146.17188}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2036753363

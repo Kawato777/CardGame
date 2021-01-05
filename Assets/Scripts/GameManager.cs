@@ -3,15 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using DG.Tweening;
+using UnityEngine.UI;
 
+[DisallowMultipleComponent]
 public class GameManager : SingletonMonoBehaviour<GameManager>
 {
     [SerializeField]
     GameObject cardPrefab;
     [SerializeField]
-    Transform playerHand, playerField, enemyHand, enemyField;
+    Transform playerHand, playerField, enemyHand, enemyField, canvas;
     [SerializeField]
     TextMeshProUGUI playerLeaderHPText, enemyLeaderHpText;
+    [SerializeField]
+    List<Button> buttons = new List<Button>(3);
 
     PlayerHandController playerHandController;
     EnemyHandController enemyHandController;
@@ -19,7 +24,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
     bool isPlayerTurn = true;   // ターン変数
     List<int> playerDeck = new List<int>() { 1, 2, 0, 1, 1, 2, 2, 0, 0, 1, 2, 0, 1, 2, 0 };   // プレイヤーデッキ
-    List<int> enemyDeck = new List<int>() { 2, 2, 1, 1, 0, 0, 1, 1, 2, 2, 1, 1, 0, 0, 2 };
+    List<int> enemyDeck = new List<int>() { 2, 2, 2, 2, 2, 0, 1, 1, 2, 2, 1, 1, 0, 0, 2 };
 
     int enemyLeaderHP,playerLeaderHP;
 
@@ -108,13 +113,15 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
     void TurnCalc() // ターンを管理する
     {
+        SetButton(isPlayerTurn);
         if (isPlayerTurn)
         {
+            
             PlayerTurn();
         }
         else
         {
-            EnemyTurn();
+            StartCoroutine(EnemyTurn());
         }
     }
 
@@ -135,14 +142,15 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         DrowCard(true);   // 手札を一枚加える
     }
 
-    void EnemyTurn()
+    IEnumerator EnemyTurn()
     {
         Debug.Log("Enemyのターン");
 
         ManaCostManager.Instance.SetManaCostText(false);
 
         DrowCard(false);
-
+        yield return new WaitForSeconds(1f);
+        
         CardController[] enemyHandCardList = enemyHandController.ReturnCardController();
         CardController[] enemyFieldCardList = enemyField.GetComponentsInChildren<CardController>();
         
@@ -150,8 +158,26 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         {
             if(enemyFieldCardList.Length < 5 && ManaCostManager.Instance.CheckUsingCost(item.model.cost, false))
             {
+                while(enemyHandController.leftCardNum + 4 < item.transform.GetSiblingIndex())
+                {
+                    enemyHandController.RightButton();
+                    yield return new WaitForSeconds(1f);
+                }
+
+                while(enemyHandController.leftCardNum > item.transform.GetSiblingIndex())
+                {
+                    enemyHandController.LeftButton();
+                    yield return new WaitForSeconds(1f);
+                }
+        
+                item.transform.SetParent(canvas);
+                print(item.transform.localPosition);
+                item.transform.DOMove(enemyField.position, 1f);
+                yield return new WaitForSeconds(1f);
+                print(item.transform.localPosition);
                 item.transform.SetParent(enemyField);   // enemyFieldに召喚
                 item.transform.SetAsLastSibling();
+                
                 ManaCostManager.Instance.UseManaCostText(item.model.cost, false);
             } 
         }
@@ -231,5 +257,13 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
         playerLeaderHPText.text = playerLeaderHP.ToString();
         enemyLeaderHpText.text = enemyLeaderHP.ToString();
+    }
+
+    void SetButton(bool flag)
+    {
+        foreach(var item in buttons)
+        {
+            item.interactable = flag;
+        }
     }
 }

@@ -2,10 +2,12 @@
   ・【解説通りに作るだけ】Unityのデジタルカードゲーム作り方(https://yuus01.info/game-make/unity_tcg_make1)
   ・【超簡単】ワンタッチでエクセルからCSV出力するVBAプログラム(https://www.excelspeedup.com/csvsyuturyoku/#i-8)
   ・【Unity】CSVからScriptableObjectにデータを流し込むEditor拡張サンプル(https://ekulabo.com/csv-to-scriptable-object)
+　・ DOTweenをふわっとまとめてみた - Qiita(https://qiita.com/kagigi/items/bdf4d42835add07b0077)
 
 <使用アセット>
  /* AssetStoreから */
   ・Aekashics Librarium
+　・DOTween
 
  /* ネットから */ +マークがある場合著作権関係気にする
   ・やさしさゴシック(http://www.fontna.com) => Text Mesh Proの関係でファイル名はローマ字
