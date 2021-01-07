@@ -12,7 +12,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     [SerializeField]
     GameObject cardPrefab;
     [SerializeField]
-    Transform playerHand, playerField, enemyHand, enemyField, canvas;
+    Transform playerHand, playerField, enemyHand, enemyField, playerLeader, canvas;
     [SerializeField]
     TextMeshProUGUI playerLeaderHPText, enemyLeaderHpText;
     [SerializeField]
@@ -24,7 +24,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
     bool isPlayerTurn = true;   // ターン変数
     List<int> playerDeck = new List<int>() { 1, 2, 0, 1, 1, 2, 2, 0, 0, 1, 2, 0, 1, 2, 0 };   // プレイヤーデッキ
-    List<int> enemyDeck = new List<int>() { 2, 2, 2, 2, 2, 0, 1, 1, 2, 2, 1, 1, 0, 0, 2 };
+    List<int> enemyDeck = new List<int>() { 0, 1, 2, 2, 2, 0, 1, 1, 2, 2, 1, 1, 0, 0, 2 };
 
     int enemyLeaderHP,playerLeaderHP;
 
@@ -133,29 +133,37 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     void PlayerTurn()
     {
         Debug.Log("Playerのターン");
+        /* マナデフォルトセット */
         ManaCostManager.Instance.SetManaCostText(true);
         
+        /* 使えるカードにガイド表示 */
         CardController[] playerFieldCardList = playerField.GetComponentsInChildren<CardController>();
         SetAttackableFieldCard(playerFieldCardList, true);
         CardController[] playerHandCardList = playerHand.GetComponentsInChildren<CardController>();
         SetUseableHandCard(playerHandCardList, true);
         
-
-        DrowCard(true);   // 手札を一枚加える
+        /* 手札を一枚加える */
+        DrowCard(true);   
     }
 
     IEnumerator EnemyTurn()
     {
         Debug.Log("Enemyのターン");
+        
+        /* エネミーカード参照 */
+        CardController[] enemyHandCardList = enemyHandController.ReturnCardController();
+        CardController[] enemyFieldCardList = enemyField.GetComponentsInChildren<CardController>();
 
+        SetAttackableFieldCard(enemyFieldCardList, true);
+        
+        /* マナデフォルトセット */
         ManaCostManager.Instance.SetManaCostText(false);
-
+        
+        /* 手札を一枚加える */
         DrowCard(false);
         yield return new WaitForSeconds(1f);
         
-        CardController[] enemyHandCardList = enemyHandController.ReturnCardController();
-        CardController[] enemyFieldCardList = enemyField.GetComponentsInChildren<CardController>();
-        
+        /* カード召喚 */
         foreach(var item in enemyHandCardList)
         {
             if(enemyFieldCardList.Length < 5 && ManaCostManager.Instance.CheckUsingCost(item.model.cost, false))
@@ -179,25 +187,57 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
                 item.transform.SetAsLastSibling();
                 
                 ManaCostManager.Instance.UseManaCostText(item.model.cost, false);
-                enemyFieldCardList = enemyField.GetComponentsInChildren<CardController>();
+                enemyFieldCardList = enemyField.GetComponentsInChildren<CardController>();  // enemyfield更新
             } 
         }
 
-        // 選んで攻撃
+        yield return new WaitForSeconds(1f);
+
+        /* 選んで攻撃 */
+        foreach(CardController card in enemyFieldCardList)
+        {
+            if (card.model.canAttack)
+            {
+                CardController[] playerFieldCardList = playerField.GetComponentsInChildren<CardController>();
+                if(playerFieldCardList.Length > 0)
+                {
+                    yield return StartCoroutine(CardBattle(card, playerFieldCardList[0], false));
+                }
+                else
+                {
+                    Vector3 cardPos = card.transform.position;
+                    card.transform.SetParent(canvas);
+                    card.transform.DOMove(playerLeader.position, 1f);
+                    yield return new WaitForSeconds(1f);
+                    AttackToLeader(card, false);
+                    card.transform.DOMove(cardPos, 1f);
+                    yield return new WaitForSeconds(1f);
+                    card.transform.SetParent(enemyField);
+                }
+            }
+        }
 
         ChangeTurn();   // ターンエンドする
     }
 
-    public void CardBattle(CardController attackCard,CardController defenceCard)
+    public IEnumerator CardBattle(CardController attackCard, CardController defenceCard, bool isPlayer)
     {
         if(attackCard.model.canAttack == false)
         {
-            return;
+            yield break;
         }
 
         if(attackCard.model.playerCard == defenceCard.model.playerCard)
         {
-            return;
+            yield break;
+        }
+
+        Vector3 attackCardPos = attackCard.transform.position;
+
+        if(!isPlayer)
+        {
+            attackCard.transform.DOLocalMove(defenceCard.transform.position, 1f);
+            yield return new WaitForSeconds(1f);
         }
 
         attackCard.model.hp -= defenceCard.model.power;
@@ -206,14 +246,23 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         attackCard.Show();
         defenceCard.Show();
 
+        bool attackCardalive = true;
+
         if (attackCard.model.hp <= 0)
         {
             attackCard.DestroyCard(attackCard);
+            attackCardalive = false;
         }
 
         if(defenceCard.model.hp <= 0)
         {
             defenceCard.DestroyCard(defenceCard);
+        }
+
+        if (!isPlayer && attackCardalive)
+        {
+            attackCard.transform.DOMove(attackCardPos, 1f);
+            yield return new WaitForSeconds(1f);
         }
 
         attackCard.model.canAttack = false;
@@ -255,18 +304,31 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         }
     }
 
-    public void AttackToLeader(CardController attackcard,bool isPlayerCard)
+    public void AttackToLeader(CardController attackcard, bool isPlayer)
     {
         if(attackcard.model.canAttack == false)
         {
             return;
         }
 
-        enemyLeaderHP -= attackcard.model.power;
-
+        if (isPlayer)
+        {
+            enemyLeaderHP -= attackcard.model.power;
+        }
+        else
+        {
+            playerLeaderHP -= attackcard.model.power;
+        }
         attackcard.model.canAttack = false;
         attackcard.view.SetCanAttackPanel(false);
-        Debug.Log($"敵のHP:{enemyLeaderHP}");
+        if (isPlayer)
+        {
+            Debug.Log($"敵のHP:{enemyLeaderHP}");
+        }
+        else
+        {
+            Debug.Log($"自分のHP:{playerLeaderHP}");
+        }
         ShowLeaderHP();
     }
 

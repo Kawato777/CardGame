@@ -30,3 +30,4 @@ apkは別リポジトリ?
 カード効果はAddComponent?GameManagerで管理?
 
 <ToDoリスト>
+攻撃時に子の順番変えない + enemyfieldのHoryzontalを消す
