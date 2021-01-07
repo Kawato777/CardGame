@@ -19,8 +19,6 @@ public class CardModel : MonoBehaviour
     {
         CardEntity cardEntity = Resources.Load<CardEntity>("CardEntityList/ID_" + cardID);
 
-        Debug.Log(cardEntity);
-
         this.cardID = cardEntity.cardID;
         name = cardEntity.name;
         cost = cardEntity.cost;

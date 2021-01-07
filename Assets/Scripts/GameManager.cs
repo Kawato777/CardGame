@@ -116,7 +116,6 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         SetButton(isPlayerTurn);
         if (isPlayerTurn)
         {
-            
             PlayerTurn();
         }
         else
@@ -134,10 +133,13 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     void PlayerTurn()
     {
         Debug.Log("Playerのターン");
-
+        ManaCostManager.Instance.SetManaCostText(true);
+        
         CardController[] playerFieldCardList = playerField.GetComponentsInChildren<CardController>();
         SetAttackableFieldCard(playerFieldCardList, true);
-        ManaCostManager.Instance.SetManaCostText(true);
+        CardController[] playerHandCardList = playerHand.GetComponentsInChildren<CardController>();
+        SetUseableHandCard(playerHandCardList, true);
+        
 
         DrowCard(true);   // 手札を一枚加える
     }
@@ -171,14 +173,13 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
                 }
         
                 item.transform.SetParent(canvas);
-                print(item.transform.localPosition);
                 item.transform.DOMove(enemyField.position, 1f);
                 yield return new WaitForSeconds(1f);
-                print(item.transform.localPosition);
                 item.transform.SetParent(enemyField);   // enemyFieldに召喚
                 item.transform.SetAsLastSibling();
                 
                 ManaCostManager.Instance.UseManaCostText(item.model.cost, false);
+                enemyFieldCardList = enemyField.GetComponentsInChildren<CardController>();
             } 
         }
 
@@ -205,12 +206,12 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         attackCard.Show();
         defenceCard.Show();
 
-        if (attackCard.model.hp < 0)
+        if (attackCard.model.hp <= 0)
         {
             attackCard.DestroyCard(attackCard);
         }
 
-        if(defenceCard.model.hp < 0)
+        if(defenceCard.model.hp <= 0)
         {
             defenceCard.DestroyCard(defenceCard);
         }
@@ -225,6 +226,32 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         {
             card.model.canAttack = canAttack;
             card.view.SetCanAttackPanel(canAttack);
+        }
+    }
+
+    void SetUseableHandCard(CardController[] cardList, bool flag)
+    {
+        foreach(CardController card in cardList)
+        {
+            if (flag)
+            {
+                if (ManaCostManager.Instance.CheckUsingCost(card.model.cost, true))
+                {
+                    card.view.SetCanAttackPanel(true);
+                }
+            }
+            else
+            {
+                card.view.SetCanAttackPanel(false);
+            }       
+        }
+    }
+
+    public void CheckUseableHandCard()
+    {
+        foreach(CardController card in playerHand.GetComponentsInChildren<CardController>())
+        {
+            card.view.SetCanAttackPanel(ManaCostManager.Instance.CheckUsingCost(card.model.cost, true));
         }
     }
 

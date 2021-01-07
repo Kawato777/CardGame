@@ -37,6 +37,8 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
         if(wasParent != cardParent)
         {
             transform.SetAsLastSibling();
+            GameManager.Instance.CheckUseableHandCard();
+            GetComponent<CardController>().view.SetCanAttackPanel(false);   // 速攻は別?
         }
         else
         {
