@@ -198,13 +198,18 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         {
             if (card.model.canAttack)
             {
+                int a = card.transform.GetSiblingIndex();
                 CardController[] playerFieldCardList = playerField.GetComponentsInChildren<CardController>();
                 if(playerFieldCardList.Length > 0)
                 {
+                    
                     yield return StartCoroutine(CardBattle(card, playerFieldCardList[0], false));
+                    yield return new WaitForSeconds(1f);
+                    
                 }
                 else
                 {
+                    enemyField.GetComponent<HorizontalLayoutGroup>().enabled = false;
                     Vector3 cardPos = card.transform.position;
                     card.transform.SetParent(canvas);
                     card.transform.DOMove(playerLeader.position, 1f);
@@ -213,7 +218,12 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
                     card.transform.DOMove(cardPos, 1f);
                     yield return new WaitForSeconds(1f);
                     card.transform.SetParent(enemyField);
+                    enemyField.GetComponent<HorizontalLayoutGroup>().enabled = true;
                 }
+                if (card)
+                {
+                    card.transform.SetSiblingIndex(a);
+                }  
             }
         }
 
@@ -236,8 +246,10 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
         if(!isPlayer)
         {
-            attackCard.transform.DOLocalMove(defenceCard.transform.position, 1f);
+            enemyField.GetComponent<HorizontalLayoutGroup>().enabled = false;
+            attackCard.transform.DOMove(defenceCard.transform.position, 1f);
             yield return new WaitForSeconds(1f);
+            enemyField.GetComponent<HorizontalLayoutGroup>().enabled = true;
         }
 
         attackCard.model.hp -= defenceCard.model.power;

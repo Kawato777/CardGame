@@ -30,4 +30,8 @@ apkは別リポジトリ?
 カード効果はAddComponent?GameManagerで管理?
 
 <ToDoリスト>
-攻撃時に子の順番変えない + enemyfieldのHoryzontalを消す
+CardText活用
+
+手札ドロー時の可能パネル出ない
+相手ドロー時三角出る
+敵攻撃時の戻りが変
