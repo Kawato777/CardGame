@@ -57,6 +57,7 @@ public class PlayerHandController : MonoBehaviour
         {
             if (leftCardNum >= nowPlayerHandCards - 5)
             {
+                
                 rightButton.SetActive(false);
                 leftButton.SetActive(true);
             }

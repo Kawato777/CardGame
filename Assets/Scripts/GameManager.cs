@@ -23,8 +23,8 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
 
     bool isPlayerTurn = true;   // ターン変数
-    List<int> playerDeck = new List<int>() { 1, 2, 0, 1, 1, 2, 2, 0, 0, 1, 2, 0, 1, 2, 0 };   // プレイヤーデッキ
-    List<int> enemyDeck = new List<int>() { 0, 1, 2, 2, 2, 0, 1, 1, 2, 2, 1, 1, 0, 0, 2 };
+    List<int> playerDeck = new List<int>() { 1, 0, 0, 0, 1, 0, 2, 0, 0, 1, 2, 0, 1, 2, 0 };   // プレイヤーデッキ
+    List<int> enemyDeck = new List<int>() { 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 1, 1, 0, 0, 2 };
 
     int enemyLeaderHP,playerLeaderHP;
 
@@ -133,6 +133,9 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
     void PlayerTurn()
     {
         Debug.Log("Playerのターン");
+        /* 手札を一枚加える */
+        DrowCard(true);   
+        
         /* マナデフォルトセット */
         ManaCostManager.Instance.SetManaCostText(true);
         
@@ -140,10 +143,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         CardController[] playerFieldCardList = playerField.GetComponentsInChildren<CardController>();
         SetAttackableFieldCard(playerFieldCardList, true);
         CardController[] playerHandCardList = playerHand.GetComponentsInChildren<CardController>();
-        SetUseableHandCard(playerHandCardList, true);
-        
-        /* 手札を一枚加える */
-        DrowCard(true);   
+        SetUseableHandCard(playerHandCardList, true);   
     }
 
     IEnumerator EnemyTurn()
