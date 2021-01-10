@@ -10,11 +10,11 @@ using UnityEngine.UI;
 public class GameManager : SingletonMonoBehaviour<GameManager>
 {
     [SerializeField]
-    GameObject cardPrefab;
+    GameObject cardPrefab, winnerPanel;
     [SerializeField]
     Transform playerHand, playerField, enemyHand, enemyField, playerLeader, canvas;
     [SerializeField]
-    TextMeshProUGUI playerLeaderHPText, enemyLeaderHpText;
+    TextMeshProUGUI playerLeaderHPText, enemyLeaderHpText, winnerText;
     [SerializeField]
     List<Button> buttons = new List<Button>(3);
 
@@ -342,6 +342,15 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
             Debug.Log($"自分のHP:{playerLeaderHP}");
         }
         ShowLeaderHP();
+        int winnerCheck = WinnerCheck();
+        if(winnerCheck == 1)
+        {
+            StartCoroutine(WinnerEffect(true));
+        }
+        else if(winnerCheck == 2)
+        {
+            StartCoroutine(WinnerEffect(false));
+        }
     }
 
     public void ShowLeaderHP()
@@ -366,5 +375,39 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         {
             item.interactable = flag;
         }
+    }
+
+    int WinnerCheck()
+    {
+        if(playerLeaderHP == 0)
+        {
+            return 2;
+        }
+        else if(enemyLeaderHP == 0)
+        {
+            return 1;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    IEnumerator WinnerEffect(bool playeriswinner)
+    {
+        winnerPanel.SetActive(true);
+        winnerText.transform.localScale = new Vector3(30f, 30f, 0f);
+        if (playeriswinner)
+        {
+            winnerText.text = "WIN!";
+            winnerText.fontSize = 36;
+        }
+        else
+        {
+            winnerText.text = "LOSE...";
+            winnerText.fontSize = 30;
+        }
+        winnerText.transform.DOScale(new Vector3(10f, 10f, 0f), 0.5f);
+        yield return new WaitForSeconds(0.5f);
     }
 }
