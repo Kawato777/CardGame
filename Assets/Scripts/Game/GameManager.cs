@@ -143,13 +143,22 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
         CardController[] playerFieldCardList = playerField.GetComponentsInChildren<CardController>();
         SetAttackableFieldCard(playerFieldCardList, true);
         CardController[] playerHandCardList = playerHand.GetComponentsInChildren<CardController>();
-        SetUseableHandCard(playerHandCardList, true);   
+        SetUseableHandCard(playerHandCardList, true);
+        SetDrag(playerFieldCardList, true);
+        SetDrag(playerHandCardList, true);
     }
 
     IEnumerator EnemyTurn()
     {
         Debug.Log("Enemyのターン");
-        
+
+        /* プレイヤーカード参照 */
+        CardController[] playerFieldCards = playerField.GetComponentsInChildren<CardController>();
+        CardController[] playerHandCards = playerHand.GetComponentsInChildren<CardController>();
+
+        SetDrag(playerFieldCards, false);
+        SetDrag(playerHandCards, false);
+
         /* エネミーカード参照 */
         CardController[] enemyHandCardList = enemyHandController.ReturnCardController();
         CardController[] enemyFieldCardList = enemyField.GetComponentsInChildren<CardController>();
@@ -305,6 +314,14 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
             {
                 card.view.SetCanAttackPanel(false);
             }       
+        }
+    }
+
+    void SetDrag(CardController[] cardControllerList, bool flag)
+    {
+        foreach(CardController card in cardControllerList)
+        {
+            card.SetDrag(flag);
         }
     }
 

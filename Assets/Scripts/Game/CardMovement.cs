@@ -11,9 +11,12 @@ public class CardMovement : MonoBehaviour, IDragHandler, IBeginDragHandler, IEnd
     PlayerHandController playerHandController;
     int childNum;
 
+    CardController card;
+
     void Start()
     {
         playerHandController = GameObject.Find("PlayerHand").GetComponent<PlayerHandController>();
+        card = GetComponent<CardController>();
     }
 
     public void OnBeginDrag(PointerEventData eventData) // ドラッグを始めるときに行う処理

@@ -24,10 +24,13 @@ Excelファイルを開いてるときにはコミットできない
 
 
 <アイデア>
-apkは別リポジトリ?
+apkは別リポジトリ
 マスターデータ(Excel)は別リポジトリ
 
 カード効果はAddComponent?GameManagerで管理?
 
 <ToDoリスト>
-CardText活用
+CardText活用<最優先事項>
+先攻後攻
+デッキシャッフル
+カード作成　※新規や効果付き
