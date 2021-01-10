@@ -24,7 +24,7 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
     bool isPlayerTurn = true;   // ターン変数
     List<int> playerDeck = new List<int>() { 1, 0, 0, 0, 1, 0, 2, 0, 0, 1, 2, 0, 1, 2, 0 };   // プレイヤーデッキ
-    List<int> enemyDeck = new List<int>() { 2, 2, 2, 2, 2, 2, 1, 1, 2, 2, 1, 1, 0, 0, 2 };
+    List<int> enemyDeck = new List<int>() { 0, 0, 0, 0, 2, 2, 1, 1, 2, 2, 1, 1, 0, 0, 2 };
 
     int enemyLeaderHP,playerLeaderHP;
 
@@ -202,10 +202,8 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
                 CardController[] playerFieldCardList = playerField.GetComponentsInChildren<CardController>();
                 if(playerFieldCardList.Length > 0)
                 {
-                    
                     yield return StartCoroutine(CardBattle(card, playerFieldCardList[0], false));
                     yield return new WaitForSeconds(1f);
-                    
                 }
                 else
                 {
@@ -273,8 +271,10 @@ public class GameManager : SingletonMonoBehaviour<GameManager>
 
         if (!isPlayer && attackCardalive)
         {
+            enemyField.GetComponent<HorizontalLayoutGroup>().enabled = false;
             attackCard.transform.DOMove(attackCardPos, 1f);
             yield return new WaitForSeconds(1f);
+            enemyField.GetComponent<HorizontalLayoutGroup>().enabled = true;
         }
 
         attackCard.model.canAttack = false;
